@@ -1,0 +1,15 @@
+.cardActions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.pagination {
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 30px 0;
+  border-top: 1px solid rgb(195, 194, 194);
+  margin-top: 5px;
+  background-color: white;
+}
