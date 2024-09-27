@@ -18,3 +18,17 @@
   border-radius: 4px;
   padding: 15px;
 }
+
+.sortField {
+  width: 200px;
+  margin-right: 16px;
+}
+
+.sortOrder {
+  width: 200px;
+  margin-right: 16px;
+}
+
+.datePicker {
+  width: 100%;
+}

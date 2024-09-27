@@ -1,12 +1,28 @@
 import { useEffect, useState } from "react";
-import { Card, Button, Pagination, Row, Col, Alert, Spin, Modal } from "antd";
+import {
+  Card,
+  Button,
+  Pagination,
+  Row,
+  Col,
+  Alert,
+  Spin,
+  Modal,
+  Select,
+} from "antd";
 import styles from "../Home/home.module.css";
 import { events } from "../../api/event";
-import { DEFAULT_SIZE } from "../../constants";
+import {
+  DEFAULT_FIELD,
+  DEFAULT_PAGE,
+  DEFAULT_SIZE,
+  DEFAULT_SORT,
+} from "../../constants";
 import EventRegistration from "./components/registration";
+import { useNavigate } from "react-router-dom";
 
 const Home: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(DEFAULT_PAGE);
   const [eventData, setEventData] = useState<{ events: any[]; total: number }>({
     events: [],
     total: 0,
@@ -15,18 +31,27 @@ const Home: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+  const [sortField, setSortField] = useState<string>(DEFAULT_FIELD);
+  const [sortOrder, setSortOrder] = useState<string>(DEFAULT_SORT);
+  const navigate = useNavigate();
+
+  const { Option } = Select;
 
   useEffect(() => {
-    fetchEvents(currentPage);
-  }, [currentPage]);
+    fetchEvents(currentPage, sortField, sortOrder);
+  }, [currentPage, sortField, sortOrder]);
 
-  const fetchEvents = async (page: number) => {
+  const fetchEvents = async (
+    page: number,
+    sortBy: string,
+    sortOrder: string
+  ) => {
     setLoading(true);
     setError(null);
     try {
       const response = await events.getEvents({
-        sortBy: "title",
-        sortOrder: "asc",
+        sortBy,
+        sortOrder,
         page,
         limit: DEFAULT_SIZE,
       });
@@ -55,6 +80,14 @@ const Home: React.FC = () => {
     return <Alert message={error} type="error" />;
   }
 
+  const handleSortChange = (value: string) => {
+    setSortField(value);
+  };
+
+  const handleOrderChange = (value: string) => {
+    setSortOrder(value);
+  };
+
   const showModal = (eventId: string) => {
     setSelectedEventId(eventId);
     setIsModalVisible(true);
@@ -65,9 +98,34 @@ const Home: React.FC = () => {
     setSelectedEventId(null);
   };
 
+  const handleViewParticipants = (eventId: string) => {
+    navigate(`/event/${eventId}/participants`);
+  };
+
   return (
     <div>
       <h2>Events</h2>
+
+      <div style={{ marginBottom: "16px" }}>
+        <Select
+          value={sortField}
+          className={styles.sortField}
+          onChange={handleSortChange}
+        >
+          <Option value="title">Title</Option>
+          <Option value="date">Event Date</Option>
+          <Option value="organizer">Organizer</Option>
+        </Select>
+
+        <Select
+          value={sortOrder}
+          className={styles.sortOrder}
+          onChange={handleOrderChange}
+        >
+          <Option value="asc">Ascending</Option>
+          <Option value="desc">Descending</Option>
+        </Select>
+      </div>
 
       <>
         <Row gutter={[16, 16]}>
@@ -79,7 +137,12 @@ const Home: React.FC = () => {
                   <Button type="link" onClick={() => showModal(event.id)}>
                     Register
                   </Button>
-                  <Button type="link">View</Button>
+                  <Button
+                    type="link"
+                    onClick={() => handleViewParticipants(event.id)}
+                  >
+                    View
+                  </Button>
                 </div>
               </Card>
             </Col>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Form, Input, Button, Radio, Alert, DatePicker } from "antd";
 import { participants } from "../../../api/participant";
+import styles from "../home.module.css";
 
 interface EventRegistrationProps {
   eventId: string;
@@ -43,7 +44,7 @@ const EventRegistration: React.FC<EventRegistrationProps> = ({
       {error && <Alert message={error} type="error" />}
 
       <Form.Item
-        label="Name"
+        label="Full name"
         name="name"
         rules={[{ required: true, message: "Please input your name!" }]}
       >
@@ -66,7 +67,7 @@ const EventRegistration: React.FC<EventRegistrationProps> = ({
         name="birthDate"
         rules={[{ required: true, message: "Please select your birth date!" }]}
       >
-        <DatePicker style={{ width: "100%" }} />
+        <DatePicker className={styles.datePicker} />
       </Form.Item>
 
       <Form.Item
