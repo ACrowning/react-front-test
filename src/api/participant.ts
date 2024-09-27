@@ -16,7 +16,7 @@ export const participants = {
     } catch (error: any) {
       return {
         data: null,
-        error: error.response?.data.message || "Network response was not ok",
+        error: error.response?.data.message || "Server error",
       };
     }
   },
@@ -39,7 +39,7 @@ export const participants = {
     } catch (error: any) {
       return {
         data: null,
-        error: error.response?.data.message || "Network response was not ok",
+        error: error.response?.data.message || "Server error",
       };
     }
   },
