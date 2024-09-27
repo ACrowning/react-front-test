@@ -134,11 +134,16 @@ const Home: React.FC = () => {
               <Card className={styles.card} title={event.title} bordered={true}>
                 <p>{event.description}</p>
                 <div className={styles.cardActions}>
-                  <Button type="link" onClick={() => showModal(event.id)}>
+                  <Button
+                    type="link"
+                    className={styles.leftAlignedButton}
+                    onClick={() => showModal(event.id)}
+                  >
                     Register
                   </Button>
                   <Button
                     type="link"
+                    className={styles.leftAlignedButton}
                     onClick={() => handleViewParticipants(event.id)}
                   >
                     View
